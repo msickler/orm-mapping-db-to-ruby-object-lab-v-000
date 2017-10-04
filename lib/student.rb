@@ -19,12 +19,8 @@ class Student
 
   def self.find_by_name(name)
     sql = <<-SQL
-     SELECT *
-      FROM students
-      WHERE name = ?
-      LIMIT 1
+     SELECT * FROM students WHERE name = ? LIMIT 1
     SQL
-
     DB[:conn].execute(sql,name).map do |row|
       self.new_from_db(row)
     end.first
@@ -37,7 +33,6 @@ class Student
       INSERT INTO students (name, grade)
       VALUES (?, ?)
     SQL
-
     DB[:conn].execute(sql, self.name, self.grade)
   end
 
@@ -49,7 +44,6 @@ class Student
       grade TEXT
     )
     SQL
-
     DB[:conn].execute(sql)
   end
 
@@ -57,4 +51,13 @@ class Student
     sql = "DROP TABLE IF EXISTS students"
     DB[:conn].execute(sql)
   end
+
+  def self.count_all_students_in_grade_9
+    sql = <<-SQL 
+    SELECT name FROM students 
+    WHERE grade = 9
+    SQL
+    DB[:conn].execute(sql)
+  end
+  
 end
